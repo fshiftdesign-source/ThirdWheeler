@@ -27,12 +27,32 @@ label start:
 
 label left_path:
     "You chose the left option."
-    return
+    jump testim
+
 
 label middle_path:
     "You chose the middle option."
-    return
+    jump testim
+
 
 label right_path:
     "You chose the right option."
-    return
+    jump testim
+
+label testim:
+
+    # MENU BUTTONS – elemental version
+
+    "Don't click, only for show."
+
+    $ fire_available  = True
+    $ water_available = True
+    $ earth_available = True
+    $ wind_available  = False
+
+    $ current_scene = "gtest"
+    $ action_buttons_visible = True
+
+    show screen action_buttons
+
+    jump testim2

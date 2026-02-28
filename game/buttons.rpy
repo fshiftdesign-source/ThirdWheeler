@@ -5,10 +5,10 @@ default action_cooldown = False
 default current_scene = "gtest"
 
 # Per button availability
-default chop_available = True
-default block_available = True
-default mock_available = True
-default bolt_available = True
+default fire_available  = True
+default water_available = True
+default earth_available = True
+default wind_available  = True
 
 define sayScreen = True
 
@@ -16,99 +16,98 @@ define sayScreen = True
 
 init python:
     ACTION_LABELS = {
-        "chop": {
-            "gtest": "test_chop",
-            "swamp": "swamp_walk",
-            "cliff": "cliff_jump",
-            "eldritch": "forest_attack",
-            "bandit": "bandit_chop",
-            "illusion": "chop_il",
-            "tree": "chop_severin_tree",
+        "fire": {
+            "gtest":   "test_chop",
+            "swamp":   "swamp_walk",
+            "cliff":   "cliff_jump",
+            "eldritch":"forest_attack",
+            "bandit":  "bandit_chop",
+            "illusion":"chop_il",
+            "tree":    "chop_severin_tree",
             "geralda": "chop_geralda",
-            "dragun": "dragon_mika_attack",
+            "dragun":  "dragon_mika_attack",
         },
 
-        "block": {
-            "gtest": "test_block",
-            "cliff": "cliff_block",
-            "eldritch": "forest_protect",
-            "bandit": "bandit_block",
-            "illusion": "block_il",
+        "water": {
+            "gtest":   "test_block",
+            "cliff":   "cliff_block",
+            "eldritch":"forest_protect",
+            "bandit":  "bandit_block",
+            "illusion":"block_il",
             "geralda": "block_geralda",
-
         },
 
-        "mock": {
-            "gtest": "test_mock",
-            "eldritch": "forest_taunt",
-            "bandit": "bandit_mock",
-            "illusion": "mock_il",
+        "earth": {
+            "gtest":   "test_mock",
+            "eldritch":"forest_taunt",
+            "bandit":  "bandit_mock",
+            "illusion":"mock_il",
             "geralda": "mock_geralda",
-            "dragun": "dragon_mika_mock",
+            "dragun":  "dragon_mika_mock",
         },
 
-        "bolt": {
-            "gtest": "test_bolt",
-            "swamp": "swamp_turnback",
-            "cliff": "cliff_run",
-            "eldritch": "forest_retreat",
-            "bandit": "bandit_bolt",
-            "illusion": "bolt_il",
-            "tree": "bolt_severin_tree",
+        "wind": {
+            "gtest":   "test_bolt",
+            "swamp":   "swamp_turnback",
+            "cliff":   "cliff_run",
+            "eldritch":"forest_retreat",
+            "bandit":  "bandit_bolt",
+            "illusion":"bolt_il",
+            "tree":    "bolt_severin_tree",
             "geralda": "bolt_geralda",
-            "dragun": "dragon_mika_bolt",
+            "dragun":  "dragon_mika_bolt",
         },
     }
 
     # Per scene tooltips for each action
     ACTION_TOOLTIPS = {
-        "chop": {
-            "gtest": "ATTACK!",
-            "swamp": "KEEP GOIN'!",
-            "cliff": "JUMP!!!",
-            "eldritch": "GOO VIOLENCE!",
-            "bandit": "SOCK 'EM!",
-            "illusion": "ATTACK!",
-            "tree": "CHOP THE TREE!",
-            "geralda": "ATTACK THE ILLUSION!",
-            "dragun": "SMASH!",
+        "fire": {
+            "gtest":   "FIRE: ATTACK!",
+            "swamp":   "FIRE: KEEP GOIN'!",
+            "cliff":   "FIRE: JUMP!!!",
+            "eldritch":"FIRE: GOO VIOLENCE!",
+            "bandit":  "FIRE: SOCK 'EM!",
+            "illusion":"FIRE: ATTACK!",
+            "tree":    "FIRE: CHOP THE TREE!",
+            "geralda": "FIRE: ATTACK THE ILLUSION!",
+            "dragun":  "FIRE: SMASH!",
         },
-        "block": {
-            "gtest": "GET 'IM TO HEAL ME!",
-            "cliff": "HOLY BUBBLE!",
-            "eldritch": "PROTECT GERALD!",
-            "bandit": "BLOCK EM!",
-            "illusion": "BE DEFENSIVE!",
-            "geralda": "DEFEND GERALD!",
+        "water": {
+            "gtest":   "WATER: GET 'IM TO HEAL ME!",
+            "cliff":   "WATER: HOLY BUBBLE!",
+            "eldritch":"WATER: PROTECT GERALD!",
+            "bandit":  "WATER: BLOCK EM!",
+            "illusion":"WATER: BE DEFENSIVE!",
+            "geralda": "WATER: DEFEND GERALD!",
         },
-        "mock": {
-            "gtest": "TAUNT!",
-            "eldritch": "MOCK!!",
-            "bandit": "MOCK 'EM!",
-            "illusion": "TALK BACK!",
-            "geralda": "TAUNT THE ILLUSION!",
-            "dragun": "SASS!",
+        "earth": {
+            "gtest":   "EARTH: TAUNT!",
+            "eldritch":"EARTH: MOCK!!",
+            "bandit":  "EARTH: MOCK 'EM!",
+            "illusion":"EARTH: TALK BACK!",
+            "geralda": "EARTH: TAUNT THE ILLUSION!",
+            "dragun":  "EARTH: SASS!",
         },
-        "bolt": {
-            "gtest": "BOLT!",
-            "swamp": "TURN BACK!",
-            "cliff": "NOPE!",
-            "eldritch": "RUN RUN RUN!",
-            "bandit": "BOLT!",
-            "illusion": "RUN! RUN! RUN!",
-            "tree": "NOPE, BYE!",
-            "geralda": "DRAG GERALD AWAY!",
-            "dragun": "PASS!",
+        "wind": {
+            "gtest":   "WIND: BOLT!",
+            "swamp":   "WIND: TURN BACK!",
+            "cliff":   "WIND: NOPE!",
+            "eldritch":"WIND: RUN RUN RUN!",
+            "bandit":  "WIND: BOLT!",
+            "illusion":"WIND: RUN! RUN! RUN!",
+            "tree":    "WIND: NOPE, BYE!",
+            "geralda": "WIND: DRAG GERALD AWAY!",
+            "dragun":  "WIND: PASS!",
         },
     }
 
     def get_action_tooltip(action, scene):
         # Helper so the screen code stays clean
         defaults = {
-            "chop": "Chop (Attack).",
-            "block": "Block (Defend).",
-            "mock": "Mock (Taunt).",
-            "bolt": "Bolt (Run).",
+            "fire":  "FIRE.",
+            "water": "WATER.",
+            "earth": "EARTH.",
+            "wind":  "WIND.",
         }
         return ACTION_TOOLTIPS.get(action, {}).get(scene, defaults.get(action, ""))
 
@@ -121,68 +120,68 @@ screen action_buttons():
         $ scene = current_scene
 
         # Get tooltips for this scene
-        $ chop_tip = get_action_tooltip("chop", scene)
-        $ block_tip = get_action_tooltip("block", scene)
-        $ mock_tip  = get_action_tooltip("mock", scene)
-        $ bolt_tip  = get_action_tooltip("bolt", scene)
+        $ fire_tip  = get_action_tooltip("fire", scene)
+        $ water_tip = get_action_tooltip("water", scene)
+        $ earth_tip = get_action_tooltip("earth", scene)
+        $ wind_tip  = get_action_tooltip("wind", scene)
 
         # Get labels for this scene
-        $ chop_label = ACTION_LABELS.get("chop", {}).get(scene, None)
-        $ block_label = ACTION_LABELS.get("block", {}).get(scene, None)
-        $ mock_label = ACTION_LABELS.get("mock", {}).get(scene, None)
-        $ bolt_label = ACTION_LABELS.get("bolt", {}).get(scene, None)
+        $ fire_label  = ACTION_LABELS.get("fire", {}).get(scene, None)
+        $ water_label = ACTION_LABELS.get("water", {}).get(scene, None)
+        $ earth_label = ACTION_LABELS.get("earth", {}).get(scene, None)
+        $ wind_label  = ACTION_LABELS.get("wind", {}).get(scene, None)
 
         fixed:
 
-            # Chop (attack)
-            if chop_available:
+            # FIRE
+            if fire_available:
                 imagebutton:
                     idle "chop.png"
                     hover "chop_hover.png"
                     action [
-                        SetVariable("action_pressed", "chop"),
-                        If(chop_label, Call(chop_label), NullAction())
+                        SetVariable("action_pressed", "fire"),
+                        If(fire_label, Call(fire_label), NullAction())
                     ]
-                    tooltip chop_tip
+                    tooltip fire_tip
                     xpos 100 ypos 30
                     at swirl_in
 
-            # Block (defend)
-            if block_available:
+            # WATER
+            if water_available:
                 imagebutton:
                     idle "block.png"
                     hover "block_hover.png"
                     action [
-                        SetVariable("action_pressed", "block"),
-                        If(block_label, Call(block_label), NullAction())
+                        SetVariable("action_pressed", "water"),
+                        If(water_label, Call(water_label), NullAction())
                     ]
-                    tooltip block_tip
+                    tooltip water_tip
                     xpos 20 ypos 100
                     at swirl_in
 
-            # Mock (taunt)
-            if mock_available:
+            # EARTH
+            if earth_available:
                 imagebutton:
                     idle "mock.png"
                     hover "mock_hover.png"
                     action [
-                        SetVariable("action_pressed", "mock"),
-                        If(mock_label, Call(mock_label), NullAction())
+                        SetVariable("action_pressed", "earth"),
+                        If(earth_label, Call(earth_label), NullAction())
                     ]
-                    tooltip mock_tip
+                    tooltip earth_tip
                     xpos 180 ypos 100
                     at swirl_in
 
-            # Bolt (run)
-            if bolt_available:
+            # WIND
+            if wind_available:
                 imagebutton:
                     idle "bolt.png"
                     hover "bolt_hover.png"
                     action [
-                        SetVariable("action_pressed", "bolt"),
-                        If(bolt_label, Call(bolt_label), NullAction())
+                        SetVariable("action_pressed", "wind"),
+                        If(wind_label, Call(wind_label), NullAction())
                     ]
-                    tooltip bolt_tip
+                    tooltip wind_tip
                     xpos 100 ypos 180
                     at swirl_in
 
@@ -190,14 +189,13 @@ screen action_buttons():
 
         if tooltip:
 
-            # optional: dim behind tooltip a bit (comment out if you don't want it)
             add Solid("#0008")
 
             frame:
                 xalign 0.5
                 yalign 0.5
                 padding (40, 22)
-                background Solid("#0000")  # keep transparent; change if you want a box
+                background Solid("#0000")
 
                 text tooltip:
                     xalign 0.5
@@ -207,6 +205,7 @@ screen action_buttons():
                     color "#ffffff"
                     outlines [(6, "#000000", 0, 0)]
                     textalign 0.5
+
 
 transform swirl_in(d=0.35, radius=40, start_zoom=0.2, spins=1.0):
     alpha 0.0
