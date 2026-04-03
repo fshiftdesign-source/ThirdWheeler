@@ -12,6 +12,8 @@ label start:
     scene black
     $ mc_dir = "center"
 
+    jump gallerytest
+
     show girl_head at Position(xcenter=0.5, yanchor=1.0, ypos=900)
 
     "Testtt"
@@ -56,3 +58,12 @@ label testim:
     show screen action_buttons
 
     jump testim2
+
+label gallerytest:
+    "Unlocking CGs for testing."
+    $ unlock_cg(1)
+    "CG 1 unlocked."
+    $ unlock_cg(2)
+    "CG 2 unlocked."
+    "End of test."
+    return
