@@ -150,6 +150,7 @@ style namebox:
 style say_label:
     properties gui.text_properties("name", accent=True)
     xalign gui.name_xalign
+    outlines [(3, "#354b88", 0, 0)]
     yalign 0.5
 
 style say_dialogue:
@@ -158,6 +159,8 @@ style say_dialogue:
     xpos gui.dialogue_xpos
     xsize gui.dialogue_width
     ypos gui.dialogue_ypos
+
+    outlines [(2, "#5271a7", 0, 0)]
 
     adjust_spacing False
 
@@ -256,27 +259,90 @@ screen quick_menu():
             textbutton _("Prefs") action ShowMenu('preferences')
 """
 
+default qm_hover = ""
+
 screen quick_menu():
     zorder 100  
     if quick_menu:
+
         vbox:
             xalign 0.83
             yalign 0.86
             spacing -15
 
+            # SAVE
             imagebutton auto "gui/menu-screens_fshift/quickmenu/save_%s.png" action QuickSave():
                 focus_mask True
+                hovered SetVariable("qm_hover", "save")
+                unhovered SetVariable("qm_hover", "")
+
+            # AUTO
             imagebutton auto "gui/menu-screens_fshift/quickmenu/auto_%s.png" action Preference("auto-forward", "toggle"):
                 xoffset 40
                 focus_mask True
+                hovered SetVariable("qm_hover", "auto")
+                unhovered SetVariable("qm_hover", "")
             
+            # SETTINGS
             imagebutton auto "gui/menu-screens_fshift/quickmenu/settings_%s.png" action ShowMenu('preferences'):
                 focus_mask True
+                hovered SetVariable("qm_hover", "settings")
+                unhovered SetVariable("qm_hover", "")
+
         hbox:
             xalign 0.64
             yalign 0.9
             
-            imagebutton auto "gui/menu-screens_fshift/quickmenu/skip_%s.png" action Skip() sensitive True
+            # SKIP
+            imagebutton auto "gui/menu-screens_fshift/quickmenu/skip_%s.png" action Skip() sensitive True:
+                at qm
+                focus_mask True
+                hovered SetVariable("qm_hover", "skip")
+                unhovered SetVariable("qm_hover", "")
+
+        # 🔤 TEXTOS INDIVIDUALES
+
+        if qm_hover == "skip":
+            text "skip":
+                at s_down
+                xalign 0.635
+                yalign 0.95
+                size gui.interface_text_size
+                style "qm_hover_outline"
+                
+        if qm_hover == "save":
+            text "save":
+                xalign 0.87
+                yalign 0.68
+                size gui.interface_text_size
+                style "qm_hover_outline"
+
+        if qm_hover == "auto":
+            text "auto":
+                xalign 0.89
+                yalign 0.77
+                size gui.interface_text_size
+                style "qm_hover_outline"      
+
+        if qm_hover == "settings":
+            text "settings":
+                xalign 0.89
+                yalign 0.86
+                size gui.interface_text_size
+                style "qm_hover_outline"
+
+style qm_hover_outline:
+    font "fonts/Fredoka-Light.ttf"
+    outlines [
+    (1,"#1b3f6f73", 0, 0),
+    (2, "#FFFFFF40", 0, 0),
+    (3, "#ffffff23", 0, 0),
+    (4, "#FFFFFF21", 0, 0),
+    (4, "#FFFFFF21", 0, 0),
+    (9, "#FFFFFF0A", 0, 0)
+]
+
+
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
 init python:
