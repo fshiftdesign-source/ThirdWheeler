@@ -60,10 +60,10 @@ label testim:
     jump testim2
 
 label gallerytest:
-    "Unlocking CGs for testing."
+    e "Unlocking CGs for testing."
     $ unlock_cg(1)
-    "CG 1 unlocked."
+    e "CG 1 unlocked."
     $ unlock_cg(2)
-    "CG 2 unlocked."
-    "End of test."
+    e "CG 2 unlocked."
+    e "End of test."
     return

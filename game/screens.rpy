@@ -234,7 +234,7 @@ style choice_button_text is default:
 ##
 ## The quick menu is displayed in-game to provide easy access to the out-of-game
 ## menus.
-
+"""
 screen quick_menu():
 
     ## Ensure this appears on top of other screens.
@@ -254,8 +254,29 @@ screen quick_menu():
             textbutton _("Q.Save") action QuickSave()
             textbutton _("Q.Load") action QuickLoad()
             textbutton _("Prefs") action ShowMenu('preferences')
+"""
 
+screen quick_menu():
+    zorder 100  
+    if quick_menu:
+        vbox:
+            xalign 0.83
+            yalign 0.86
+            spacing -15
 
+            imagebutton auto "gui/menu-screens_fshift/quickmenu/save_%s.png" action QuickSave():
+                focus_mask True
+            imagebutton auto "gui/menu-screens_fshift/quickmenu/auto_%s.png" action Preference("auto-forward", "toggle"):
+                xoffset 40
+                focus_mask True
+            
+            imagebutton auto "gui/menu-screens_fshift/quickmenu/settings_%s.png" action ShowMenu('preferences'):
+                focus_mask True
+        hbox:
+            xalign 0.64
+            yalign 0.9
+            
+            imagebutton auto "gui/menu-screens_fshift/quickmenu/skip_%s.png" action Skip() sensitive True
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
 ## the player has not explicitly hidden the interface.
 init python:
