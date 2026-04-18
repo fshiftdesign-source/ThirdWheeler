@@ -17,8 +17,60 @@ transform entermm:
     linear 2.0 alpha 1.0
 
 # -------------------------------------------------
+#PAUSE SCREEN
+transform left_move:
+    xoffset 0
+
+    on hover:
+        linear 0.2 xoffset -10
+
+    on idle:
+        linear 0.2 xoffset 0
+transform fade_in_slow:
+    alpha 0.0
+    linear 1.5 alpha 1.0
+
+transform slide_in_left:
+    xoffset -50
+    alpha 0.0
+    easein 0.5 xoffset 0 alpha 1.0
+
+transform slide_in:
+    xoffset 20
+    alpha 0.0
+    easein 0.7 xoffset 0 alpha 1.0
+
+transform enter_ftop:
+    yoffset -30
+    alpha 0.0
+    easein 0.5 yoffset 0 alpha 1.0
+transform enter_fbottom:
+    yoffset 30
+    alpha 0.0
+    easein 0.5 yoffset 0 alpha 1.0
+
+transform pulse:
+    pause 2.0
+    easein 0.18 zoom 1.04
+    easeout 0.18 zoom 1.0
+    pause 0.12
+    easein 0.14 zoom 1.02
+    easeout 0.16 zoom 1.0
+    pause 2.0
+    repeat
+
+transform gallery_hover:
+    on hover:
+        easein 0.15 zoom 1.0090
+    on idle:
+        easeout 0.20 zoom 1.0
+
+
 
 # Basic anims
+
+
+
 
 transform fade_in:
     alpha 0.0

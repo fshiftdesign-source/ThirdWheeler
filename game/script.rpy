@@ -12,7 +12,7 @@ label start:
     scene black
     $ mc_dir = "center"
 
-    jump gallerytest
+    jump options_test
 
     show girl_head at Position(xcenter=0.5, yanchor=1.0, ypos=900)
 
@@ -67,3 +67,7 @@ label gallerytest:
     e "CG 2 unlocked."
     e "End of test."
     return
+
+label options_test:
+    #show screen key_listener
+    "Testing options menu."
