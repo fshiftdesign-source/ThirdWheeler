@@ -2,20 +2,31 @@ init python:
 
     TOTAL_CGS = 8
     ITEMS_PER_PAGE = 4
-
     GALLERY_MAX_PAGE = max(0, (TOTAL_CGS - 1) // ITEMS_PER_PAGE)
+
+    config.overlay_screens.append("key_listener")
 
     if not hasattr(persistent, "cg_unlocked") or persistent.cg_unlocked is None:
         persistent.cg_unlocked = [False] * (TOTAL_CGS + 1)
 
+    if not hasattr(persistent, "cg_seen") or persistent.cg_seen is None:
+        persistent.cg_seen = [False] * (TOTAL_CGS + 1)
+
     def unlock_cg(index):
         if index <= TOTAL_CGS:
-            if index >= len(persistent.cg_unlocked):
-                persistent.cg_unlocked.extend(
-                    [False] * (index - len(persistent.cg_unlocked) + 1)
-                )
             persistent.cg_unlocked[index] = True
             renpy.save_persistent()
+
+    def mark_cg_seen(index):
+        if index < len(persistent.cg_seen):
+            persistent.cg_seen[index] = True
+            renpy.save_persistent()
+
+    def has_new_cg():
+        for i in range(1, TOTAL_CGS + 1):
+            if persistent.cg_unlocked[i] and not persistent.cg_seen[i]:
+                return True
+        return False
 
 
 # 🎯 THUMB CONSISTENTE
@@ -118,6 +129,9 @@ screen cg_gallery():
 screen cg_full(cg_number):
 
     modal True
+
+    # ✅ marcar como vista
+    on "show" action Function(mark_cg_seen, cg_number)
 
     add Solid("#000000")
 

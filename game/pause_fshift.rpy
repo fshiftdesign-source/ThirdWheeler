@@ -1,12 +1,11 @@
-init python:
-    config.overlay_screens.append("key_listener")
+
 
 image bg_pause = "gui/menu-screens_fshift/pause/bg1.png"
 image frame_pause = "gui/menu-screens_fshift/pause/frame2.png"
 image column_pause = "gui/menu-screens_fshift/pause/column3.png"
 image pause_title = "gui/menu-screens_fshift/pause/title4.png"
 
-
+define config.keymap['game_menu'] = []
     
 
 
@@ -39,8 +38,17 @@ screen pause_screen():
         xalign 1.1
         xoffset -10
         at pulse
+
         imagebutton auto "gui/menu-screens_fshift/pause/gallery_%s.png" action ShowMenu("cg_gallery"):
             at gallery_hover
+
+
+    fixed:
+
+        if has_new_cg():
+            add "gui/menu-screens_fshift/pause/new.png":
+                xalign 0.9
+                yalign 0.1
     hbox:
         at enter_ftop
         xalign 0.15
@@ -81,3 +89,8 @@ screen key_listener():
 label pause_call:
     call screen pause_screen
     return
+
+label open_gallery:
+    $ persistent.cg_seen = persistent.cg_unlocked[:]
+    $ renpy.save_persistent()
+    call screen cg_gallery

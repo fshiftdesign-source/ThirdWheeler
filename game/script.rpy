@@ -11,7 +11,7 @@ label start:
     scene black
     $ mc_dir = "center"
 
-    jump options_test
+    jump gallerytest
 
     show girl_head at Position(xcenter=0.5, yanchor=1.0, ypos=900)
 
