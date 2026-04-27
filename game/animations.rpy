@@ -2,15 +2,18 @@
 # This file contains the transforms used for animations in the game.
 transform fade_overlay:
     alpha 0.0
-    ease 0.4 alpha 1.0
+    easein 0.2 alpha 0.6
+    easeout 0.3 alpha 1.0
 
 transform fade_overlay_out:
     alpha 1.0
-    ease 0.4 alpha 0.0
+    easein 0.2 alpha 0.4
+    easeout 0.4 alpha 0.0
 
 transform fade_out:
     alpha 1.0
-    ease 0.4 alpha 0.0
+    easein 0.15 alpha 0.7
+    easeout 0.35 alpha 0.0
 
 transform slide_out:
     xoffset 0

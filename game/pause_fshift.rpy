@@ -131,15 +131,14 @@ screen pause_screen():
     # -------------------------
 
     if closing:
-        add Solid("#000"):
-            at (fade_overlay if closing else fade_overlay_out)
+        add Solid("#0a0a0a") at (fade_overlay if closing else fade_overlay_out)
     # -------------------------
     # ⏱️ CIERRE REAL + ACCIÓN
     # -------------------------
 
     fixed:
         if closing:
-            timer 0.3 action [
+            timer 0.4 action [
                 Hide("pause_screen"),
                 If(next_action, next_action)
             ]
