@@ -70,4 +70,4 @@ label gallerytest:
 
 label options_test:
     #show screen key_listener
-    "Testing options menu."
+    e "Testing options menu."
