@@ -17,10 +17,12 @@ init python:
             persistent.cg_unlocked[index] = True
             renpy.save_persistent()
 
+
+# 🎯 THUMB CONSISTENTE
 transform cg_thumb:
-    size (600, 400)
-    xoffset -30
-    fit "cover"
+    xysize (380, 280)
+    fit "contain"
+
 
 screen cg_gallery():
 
@@ -28,8 +30,6 @@ screen cg_gallery():
     modal True
 
     default page = 0
-
-    
 
     key "K_ESCAPE" action Return()
 
@@ -39,11 +39,16 @@ screen cg_gallery():
 
         $ start = page * ITEMS_PER_PAGE
 
+        # 🧠 grilla centrada REAL
+        $ center_x = 1150
+        $ gap_x = 400
+        $ gap_y = 260
+
         $ positions = [
-            (600, 380),
-            (1200, 380),
-            (600, 670),
-            (1200, 670),
+            (center_x - gap_x//2, 400),
+            (center_x + gap_x//2, 400),
+            (center_x - gap_x//2, 400 + gap_y),
+            (center_x + gap_x//2, 400 + gap_y),
         ]
 
         for i in range(ITEMS_PER_PAGE):
@@ -56,29 +61,23 @@ screen cg_gallery():
 
                 if cg_index < len(persistent.cg_unlocked) and persistent.cg_unlocked[cg_index]:
 
+                    # ✅ DESBLOQUEADA
                     button:
                         xpos xpos
                         ypos ypos
-                        anchor (0.0, 0.5)
+                        anchor (0.5, 0.5)
 
-                        frame:
-                            xysize (500, 400)
-                            background None
-
-                            add "images/cg/cg%d.png" % cg_index:
-                                at zoomin
-                                align (0.5, 0.5)
-                                fit "contain"
-                                xysize (500, 400)
+                        add "images/cg/cg%d.png" % cg_index at cg_thumb
 
                         action Show("cg_full", cg_number=cg_index)
 
                 else:
 
+                    # 🔒 BLOQUEADA
                     button:
                         xpos xpos
                         ypos ypos
-                        anchor (0.0, 0.5)
+                        anchor (0.5, 0.5)
 
                         add "images/cg/locked.png" at cg_thumb
 
@@ -87,31 +86,34 @@ screen cg_gallery():
     add "gui/menu-screens_fshift/cg_gallery/bg_gallery.png"
     use navigation
 
-    if page > 0:    
-        
+    # ◀
+    if page > 0:
         imagebutton:
             at glow
-            xalign 0.2
+            xalign 0.1
             yalign 0.5
             idle "gui/menu-screens_fshift/cg_gallery/arrow_l.png"
             hover "gui/menu-screens_fshift/cg_gallery/arrow_l.png"
             action SetScreenVariable("page", page - 1)
 
+    # ▶
     if page < GALLERY_MAX_PAGE:
-
         imagebutton:
             at glow
-            xalign 0.97
+            xalign 0.9
             yalign 0.5
             idle "gui/menu-screens_fshift/cg_gallery/arrow_r.png"
             hover "gui/menu-screens_fshift/cg_gallery/arrow_r.png"
             action SetScreenVariable("page", page + 1)
 
-    text "PAGE [page+1] / [GALLERY_MAX_PAGE+1]":
-        xalign 0.55
-        yalign 0.13
+    # 📄 páginas centrado
+    text "[page+1] / [GALLERY_MAX_PAGE+1]":
+        xalign 0.5
+        yalign 0.9
         size 40
         color "#ffffff"
+        outlines [(2, "#00000080", 0, 0)]
+
 
 screen cg_full(cg_number):
 
@@ -126,5 +128,3 @@ screen cg_full(cg_number):
     key "mouseup_1" action Hide("cg_full")
     key "mouseup_3" action Hide("cg_full")
     key "K_ESCAPE" action Hide("cg_full")
-
-
