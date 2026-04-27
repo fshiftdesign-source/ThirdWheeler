@@ -6,11 +6,6 @@ image frame_pause = "gui/menu-screens_fshift/pause/frame2.png"
 image column_pause = "gui/menu-screens_fshift/pause/column3.png"
 image pause_title = "gui/menu-screens_fshift/pause/title4.png"
 
-
-    
-
-
-
 screen pause_screen():
 
     modal True
@@ -21,6 +16,7 @@ screen pause_screen():
     add "bg_pause":
         at fade_in
         align (0.5, 0.5)
+
     add "frame_pause":
         at fade_in_slow
         align (0.5, 0.5)

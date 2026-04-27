@@ -4,7 +4,8 @@
 # name of the character.
 
 define e = Character("Eileen")
-image placeholder = "bg_placeholder.png"
+
+
 # The game starts here.
 
 label start:
@@ -68,6 +69,5 @@ label gallerytest:
     return
 
 label options_test:
-    show placeholder
     #show screen key_listener
     "Testing options menu."
