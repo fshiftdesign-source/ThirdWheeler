@@ -101,7 +101,7 @@ screen cg_gallery():
     if page > 0:
         imagebutton:
             at glow
-            xalign 0.1
+            xalign 0.28
             yalign 0.5
             idle "gui/menu-screens_fshift/cg_gallery/arrow_l.png"
             hover "gui/menu-screens_fshift/cg_gallery/arrow_l.png"
@@ -112,6 +112,7 @@ screen cg_gallery():
         imagebutton:
             at glow
             xalign 0.9
+            xoffset 110
             yalign 0.5
             idle "gui/menu-screens_fshift/cg_gallery/arrow_r.png"
             hover "gui/menu-screens_fshift/cg_gallery/arrow_r.png"
@@ -119,8 +120,10 @@ screen cg_gallery():
 
     # 📄 páginas centrado
     text "[page+1] / [GALLERY_MAX_PAGE+1]":
-        xalign 0.5
+        xalign 0.6
         yalign 0.9
+        yoffset -84
+        xoffset 10
         size 40
         color "#ffffff"
         outlines [(2, "#00000080", 0, 0)]
