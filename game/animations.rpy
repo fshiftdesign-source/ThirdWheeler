@@ -1,6 +1,24 @@
 
 # This file contains the transforms used for animations in the game.
 
+transform fade_overlay:
+    alpha 0.0
+    ease 0.3 alpha 1.0
+
+transform fade_out:
+    alpha 1.0
+    ease 0.4 alpha 0.0
+
+transform slide_out:
+    xoffset 0
+    alpha 1.0
+    ease 0.3 xoffset 40 alpha 0.0
+
+transform slide_out_left:
+    xoffset 0
+    alpha 1.0
+    ease 0.3 xoffset -40 alpha 0.0
+
 #Main menu buttons anims:
 
 transform mm:
