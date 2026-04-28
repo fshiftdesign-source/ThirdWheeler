@@ -3,6 +3,9 @@
 # ==============================
 default active_particles = []
 
+init -20 python:
+    config.gl2 = True
+
 init -10 python:
     import random
 
@@ -105,11 +108,7 @@ label spawn_particles_click:
 
     $ x, y = renpy.get_mouse_pos()
 
-    $ active_particles.extend(spawn_particles(x, y))
-
-    $ renpy.restart_interaction()
-
-    
+    $ add_particles(x, y)
 
     return
 
@@ -125,10 +124,4 @@ screen particle_system():
             xpos p["x"]
             ypos p["y"]
             anchor (0.5, 0.5)
-
-            at particle_anim(
-                p["dx"],
-                p["dy"],
-                p["rot"],
-                p["dur"]
-            )
+            at particle_anim(p["dx"], p["dy"], p["rot"], p["dur"])
