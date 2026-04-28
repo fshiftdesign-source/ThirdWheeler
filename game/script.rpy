@@ -11,7 +11,7 @@ label start:
     scene black
     $ mc_dir = "center"
 
-    jump gallerytest
+    jump particle_demo
 
     show girl_head at Position(xcenter=0.5, yanchor=1.0, ypos=900)
 
@@ -71,3 +71,21 @@ label options_test:
     show placeholder
     #show screen key_listener
     e "Testing options menu."
+
+label particle_demo:
+
+    show screen particle_system
+
+    #$ active_particles = spawn_particles(960, 540)
+
+    "Hacé click en cualquier parte."
+
+    "Boom de partículas ✨"
+
+    menu:
+        "continuar":
+            jump particle_demo
+        "terminar":
+            pass
+
+    return
