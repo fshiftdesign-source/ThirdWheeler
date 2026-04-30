@@ -5,6 +5,7 @@
 
 define e = Character("Eileen")
 image placeholder = "bg_placeholder.png"
+
 # The game starts here.
 
 label start:

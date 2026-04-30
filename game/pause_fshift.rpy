@@ -4,12 +4,17 @@ image column_pause = "gui/menu-screens_fshift/pause/column3.png"
 image pause_title = "gui/menu-screens_fshift/pause/title4.png"
 
 
+
 screen pause_screen():
 
     modal True
     zorder 100
 
+    use stars_screen 
+
     key "K_ESCAPE" action Hide("pause_screen")
+    
+
 
     add "bg_pause":
         at fade_in
