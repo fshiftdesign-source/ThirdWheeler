@@ -80,17 +80,7 @@ screen custom_navigation():
 
     zorder 50
 
-    # =============================================
-    # WAVES
-    # =============================================
-
-    add "gui/menu-screens_fshift/navigation/wave_left.png":
-        xpos 0
-        yalign 1.0
-
-    add "gui/menu-screens_fshift/navigation/wave_right.png":
-        xalign 1.0
-        yalign 1.0
+    
 
 
     # =============================================
