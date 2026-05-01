@@ -189,8 +189,3 @@ transform glow:
 # -------------------------------------------------
 #OPTIONS SCREEN
 
-transform thumb_zoom:
-    on hover:
-        linear 0.2 zoom 1.05
-    on idle:
-        linear 0.2 zoom 1.0

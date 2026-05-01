@@ -52,7 +52,9 @@ screen preferences():
     add "gui/menu-screens_fshift/options/title.png":
         xalign 0.52
         yoffset 50
-
+    vbox:
+        xoffset -420
+        use stars_screen()
     # =====================================================
     # MAIN CONTAINER
     # ahora podes mover TODO junto con xpos/ypos
@@ -68,7 +70,7 @@ screen preferences():
             # LEFT COLUMN
             # =================================================
             vbox:
-                spacing 30
+                spacing 20
 
                 # DISPLAY
                 text "Display" style "pref_title"
@@ -90,7 +92,7 @@ screen preferences():
                 text "Rollback" style "pref_title"
 
                 hbox:
-                    spacing 15
+                    spacing 5
 
                     # LEFT
                     hbox:
@@ -196,7 +198,7 @@ screen preferences():
             # RIGHT COLUMN
             # =================================================
             vbox:
-                spacing 35
+                spacing 10
 
                 # MUSIC
                 text "Music Volume" style "pref_title"
