@@ -21,47 +21,9 @@ screen background_pattern():
 # -------------------------------------------------
 # use background_pattern PARA EL PATRON EN DIAGONAL!!!!
 
-#STARS
-image stars = "gui/test.png"
-image stars_der = "gui/test_2.png"
 
-#STARS | Menu Anims + script
-init python:
-    import math
 
-    def _swing_sine_func(trans, st, at, amp=12, speed=0.5):
-        trans.rotate = amp * math.sin(st * speed)
-        return 0
 
-transform swing_soft_reversed:
-    anchor (0.5, 0.0)
-    align (0.5, 0.0)
-    transform_anchor True
-
-    function renpy.curry(_swing_sine_func)(amp=-8, speed=1.2)
-
-    repeat
-
-transform swing_soft:
-    anchor (0.5, 0.0)
-    align (0.5, 0.0)
-    transform_anchor True
-
-    function renpy.curry(_swing_sine_func)(amp=8, speed=1.2)
-
-# ESTRELLAS POSICIONADAS LKDJFJLKA VVV
-# -------------------------------------------------
-screen stars_screen():
-
-    hbox:
-        spacing -40
-        add "stars":
-            at swing_soft
-            xoffset 300
-
-        add "stars_der":
-            at swing_soft_reversed
-            xoffset 60
 
 ##screen options
 screen preferences():
@@ -71,7 +33,8 @@ screen preferences():
     add "gui/menu-screens_fshift/options/bg_1.png"
     add "gui/menu-screens_fshift/options/bg_2.png":
         xalign 1.0
-
+    add "gui/menu-screens_fshift/options/corner_stars.png":
+        xalign 1.0
     use background_pattern
     #use stars_screen
     use navigation
@@ -101,16 +64,17 @@ screen preferences():
 
             hbox:
                 spacing 30
+                imagebutton:
+                    idle "gui/menu-screens_fshift/options/fullscreen_idle.png"
+                    hover "gui/menu-screens_fshift/options/fullscreen_hover.png"
+                    action Preference("display", "fullscreen")
 
                 imagebutton:
                     idle "gui/menu-screens_fshift/options/windowed_idle.png"
                     hover "gui/menu-screens_fshift/options/windowed_hover.png"
                     action Preference("display", "window")
 
-                imagebutton:
-                    idle "gui/menu-screens_fshift/options/fullscreen_idle.png"
-                    hover "gui/menu-screens_fshift/options/fullscreen_hover.png"
-                    action Preference("display", "fullscreen")
+                
 
             # ROLLBACK
             text "Rollback" style "pref_title"
@@ -250,24 +214,23 @@ screen preferences():
 
 style pref_title:
     size 40
-    color "#AFCBFF"
-    outlines [(2, "#FFFFFF80", 0, 0)]
+    color "#8fabdf"
+    outlines [(4, "#FFFFFF80", 0, 0)]
 
 style pref_text:
     size 28
-    color "#AFCBFF"
+    color "#869dc9"
 
-style custom_slider is bar:
+style custom_slider is slider:
     xsize 424
-    ysize 36
+    ysize 58
     
 
     left_bar Frame("gui/menu-screens_fshift/options/slider_full.png", 0, 0)
     right_bar Frame("gui/menu-screens_fshift/options/slider_empty.png", 0, 0)
-
+    
     thumb "gui/menu-screens_fshift/options/thumb_idle.png"
     thumb_offset -24
     
-
 transform slider_thumb_center:
     yalign 0.5
