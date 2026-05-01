@@ -231,9 +231,12 @@ screen preferences():
 
 style pref_title:
     size 40
-    color "#8fabdf"
-    outlines [(4, "#FFFFFF80", 0, 0)]
+    color "#82ABD4"
 
+    outlines [
+        (7, "#A3C5E0", 0, 2),      # outline oscuro exterior
+        (4, "#ffffffff", 0, 0)     # outline claro interior
+    ]
 style pref_text:
     size 28
     color "#869dc9"
