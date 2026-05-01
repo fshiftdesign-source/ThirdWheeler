@@ -186,3 +186,11 @@ transform glow:
     linear 0.7 alpha 0.3
     repeat
 
+# -------------------------------------------------
+#OPTIONS SCREEN
+
+transform thumb_zoom:
+    on hover:
+        linear 0.2 zoom 1.05
+    on idle:
+        linear 0.2 zoom 1.0
