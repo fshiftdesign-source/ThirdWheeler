@@ -10,7 +10,7 @@ screen pause_screen():
     modal True
     zorder 100
 
-    use stars_screen 
+    
 
     key "K_ESCAPE" action Hide("pause_screen")
     
@@ -19,7 +19,7 @@ screen pause_screen():
     add "bg_pause":
         at fade_in
         align (0.5, 0.5)
-
+    use stars_screen
     add "frame_pause":
         at fade_in_slow
         align (0.5, 0.5)
