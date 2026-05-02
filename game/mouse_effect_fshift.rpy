@@ -1,15 +1,23 @@
 # ==============================
-# ✨ PARTICLE SYSTEM (IMPROVED)
+# 🌊 RIPPLE SYSTEM
+# usando tus imágenes actuales
 # ==============================
+
 default active_particles = []
 
 init -20 python:
     config.gl2 = True
 
 init -10 python:
+
     import random
+    import time
 
     config.top_layers.append("particles")
+
+    # ==============================
+    # 🖼️ TUS IMÁGENES
+    # ==============================
 
     PARTICLE_IMAGES = [
         "particle1.png",
@@ -18,92 +26,85 @@ init -10 python:
         "particle4.png"
     ]
 
-    MAX_PARTICLES = 80   # 🔴 límite
+    MAX_PARTICLES = 50
+    RIPPLE_LIFETIME = 0.6
 
-    def spawn_particles(x, y, amount=6):  # 🔴 menos cantidad
-        particles = []
-
-        for i in range(amount):
-            particles.append({
-                "img": random.choice(PARTICLE_IMAGES),
-                "x": x,
-                "y": y,
-                "dx": random.randint(-140, 140),
-                "dy": random.randint(-140, 140),
-                "rot": random.randint(-180, 180),
-                "dur": random.uniform(0.3, 0.6),  # 🔴 menos duración
-            })
-
-        return particles
-
+    # ==============================
+    # 🌊 CREAR RIPPLE
+    # ==============================
 
     def add_particles(x, y):
 
-        store.active_particles.extend(spawn_particles(x, y))
+        imgs = PARTICLE_IMAGES[:]
+        random.shuffle(imgs)
 
-        # 🔴 recorte (clave performance)
+        for i, img in enumerate(imgs):
+
+            store.active_particles.append({
+                "img": img,
+                "x": x,
+                "y": y,
+                "time": time.time(),
+
+                # primeras 2 internas
+                "inner": i % 2 == 0,
+            })
+
+        # Limita partículas
         if len(store.active_particles) > MAX_PARTICLES:
             store.active_particles = store.active_particles[-MAX_PARTICLES:]
 
-    # ==============================
-    # 🎲 GENERADOR
-    # ==============================
-    def spawn_particles(x, y, amount=12):
-
-        particles = []
-
-        for i in range(amount):
-            particles.append({
-                "img": random.choice(PARTICLE_IMAGES),
-                "x": x,
-                "y": y,
-
-                # Movimiento
-                "dx": random.randint(-180, 180),
-                "dy": random.randint(-180, 180),
-
-                # Rotación
-                "rot": random.randint(-360, 360),
-
-                # Duración
-                "dur": random.uniform(0.5, 0.9),
-            })
-
-        return particles
-
-
-    # ==============================
-    # 🖱️ CLICK
-    # ==============================
-    def add_particles(x, y):
-
-        # 👉 ACUMULA en vez de reemplazar
-        store.active_particles.extend(spawn_particles(x, y))
-
         renpy.restart_interaction()
 
-        
+    # ==============================
+    # 🧹 LIMPIEZA
+    # ==============================
 
+    def cleanup_particles():
 
-    def clear_particles_safe():
+        now = time.time()
 
-        # Limpia TODO (simple)
-        store.active_particles = []
-
-        renpy.restart_interaction()
+        store.active_particles = [
+            p for p in store.active_particles
+            if now - p["time"] < RIPPLE_LIFETIME
+        ]
 
 
 # ==============================
-# 🎬 ANIMACIÓN
+# 🌊 RIPPLE EXTERIOR
 # ==============================
 
-transform particle_anim(dx, dy, rot, dur):
+transform ripple_outer:
 
     alpha 1.0
+    zoom 0.15
 
-    linear dur xoffset dx yoffset dy rotate rot alpha 0.0
+    parallel:
+        easeout 0.55 zoom 1.5
+
+    parallel:
+        easeout 0.55 alpha 0.0
+
 
 # ==============================
+# 🌊 RIPPLE INTERIOR
+# ==============================
+
+transform ripple_inner:
+
+    alpha 0.8
+    zoom 0.05
+
+    parallel:
+        easeout 0.35 zoom 0.75
+
+    parallel:
+        easeout 0.35 alpha 0.0
+
+# ==============================
+# 🖱️ CLICK
+# ==============================
+
 label spawn_particles_click:
 
     $ x, y = renpy.get_mouse_pos()
@@ -112,16 +113,34 @@ label spawn_particles_click:
 
     return
 
+
+# ==============================
+# 🎬 SCREEN
+# ==============================
+
 screen particle_system():
 
     layer "particles"
 
-    key "mousedown_1" action Function(renpy.call_in_new_context, "spawn_particles_click")
+    # Limpieza automática
+    timer 0.05 repeat True action Function(cleanup_particles)
+
+    # Click / tap
+    key "mousedown_1" action Function(
+        renpy.call_in_new_context,
+        "spawn_particles_click"
+    )
 
     for p in active_particles:
 
         add p["img"]:
+
             xpos p["x"]
             ypos p["y"]
+
             anchor (0.5, 0.5)
-            at particle_anim(p["dx"], p["dy"], p["rot"], p["dur"])
+
+            if p["inner"]:
+                at ripple_inner
+            else:
+                at ripple_outer
