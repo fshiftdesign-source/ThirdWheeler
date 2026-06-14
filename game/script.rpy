@@ -9,10 +9,11 @@ image placeholder = "bg_placeholder.png"
 # The game starts here.
 
 label start:
+
+    jump gallerytest
+
     scene black
     $ mc_dir = "center"
-
-    jump particle_demo
 
     show girl_head at Position(xcenter=0.5, yanchor=1.0, ypos=900)
 
@@ -60,33 +61,29 @@ label testim:
     jump testim2
 
 label gallerytest:
+    show placeholder
+    "asdfasdfdasf dsafadsf adsfasdf adfasdf adf asdf adfa dadf adfasdf asdd fasd asdf adfa dfa "
+    "asdfasdfdasf dsafadsf adsfasdf adfasdf adf asdf adfa dadf adfasdf asdd fasd asdf adfa dfa "
+    "asdfasdfdasf dsafadsf adsfasdf adfasdf adf asdf adfa dadf adfasdf asdd fasd asdf adfa dfa "
+    "asdfasdfdasf dsafadsf adsfasdf adfasdf adf asdf adfa dadf adfasdf asdd fasd asdf adfa dfa "
+    "asdfasdfdasf dsafadsf adsfasdf adfasdf adf asdf adfa dadf adfasdf asdd fasd asdf adfa dfa "
+
     e "Unlocking CGs for testing."
+
     $ unlock_cg(1)
     e "CG 1 unlocked."
+
     $ unlock_cg(2)
     e "CG 2 unlocked."
-    e "End of test."
-    return
-
-label options_test:
-    show placeholder
-    #show screen key_listener
-    e "Testing options menu."
-
-label particle_demo:
-
-    show screen particle_system
-
-    #$ active_particles = spawn_particles(960, 540)
-
-    "Hacé click en cualquier parte."
-
-    "Boom de partículas ✨"
 
     menu:
-        "continuar":
-            jump particle_demo
-        "terminar":
-            pass
+        "What would you like to do?"
 
-    return
+        "Run the gallery test again":
+            jump gallerytest
+
+        "Continue":
+            return
+
+
+

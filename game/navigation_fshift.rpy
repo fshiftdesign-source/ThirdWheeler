@@ -1,14 +1,8 @@
-# =================================================
-# STARS
-# =================================================
 
 image stars = "gui/test.png"
 image stars_der = "gui/test_2.png"
 
 
-# =================================================
-# STARS | Menu animation script
-# =================================================
 
 init python:
     import math
@@ -19,6 +13,7 @@ init python:
 
 
 transform swing_soft_reversed:
+    subpixel True
     anchor (0.5, 0.0)
     align (0.5, 0.0)
     transform_anchor True
@@ -29,6 +24,7 @@ transform swing_soft_reversed:
 
 
 transform swing_soft:
+    subpixel True
     anchor (0.5, 0.0)
     align (0.5, 0.0)
     transform_anchor True
@@ -38,9 +34,6 @@ transform swing_soft:
     repeat
 
 
-# =================================================
-# STARS SCREEN
-# =================================================
 
 screen stars_screen():
 
@@ -56,9 +49,6 @@ screen stars_screen():
             xoffset 60
 
 
-# =================================================
-# NAVIGATION BUTTON HOVER
-# =================================================
 
 transform nav_button_hover:
 
@@ -71,10 +61,6 @@ transform nav_button_hover:
         ease 0.15 zoom 1.0
 
 
-# =================================================
-# CUSTOM NAVIGATION
-# Replaces default Ren'Py navigation
-# =================================================
 
 screen custom_navigation():
 
@@ -83,17 +69,11 @@ screen custom_navigation():
     
 
 
-    # =============================================
-    # STARS
-    # =============================================
-
+    
     use stars_screen
 
 
-    # =============================================
-    # BUTTONS
-    # =============================================
-
+    
     hbox:
         xalign 0.5
         yalign 0.94

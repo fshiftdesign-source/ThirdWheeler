@@ -209,13 +209,79 @@ style input:
 screen choice(items):
     style_prefix "choice"
 
-    vbox:
-        for i in items:
-            textbutton i.caption action i.action
+    # 1. Creamos una variable para guardar qué botón está seleccionado
+    default boton_hovereado = None
 
+    vbox:
+        # Para poder posicionar la imagen exactamente encima de cada botón,
+        # envolvemos el bucle en un contenedor 'fixed' o usamos 'as'
+        for index, i in enumerate(items):
+            
+            # Un contenedor fixed asegura que la imagen se dibuje justo en la misma posición que el botón
+            fixed:
+                xsize 1220
+                ysize 88
+                textbutton i.caption action i.action:
+                    at m
+                    hover_sound "gui/sfx/hover_bubble.mp3"
+                    activate_sound "gui/sfx/click_2.mp3"
+
+                    ## Tamaño exacto de tu PNG de fondo
+                    xsize 1220
+                    ysize 88
+
+                    ## 2. FUNCIONES PARA DETECTAR EL CURSOR
+                    # Cuando el mouse entra, guarda el índice de este botón
+                    hovered SetScreenVariable("boton_hovereado", index)
+                    # Cuando el mouse sale, limpia la variable
+                    unhovered SetScreenVariable("boton_hovereado", None)
+
+                    ## Centrado perfecto del texto
+                    text_xalign 0.5
+                    text_yalign 0.5
+
+                    ## Configuración de fuente limpia
+                    text_font "fonts/Fredoka-SemiBold.ttf"
+                    text_color "#ffffff"
+                    text_size 27
+
+                    ## Fusionamos el borde azul y las 3 sombras acá adentro.
+                    text_outlines [
+                        (1, "#3b6897de", 0, 0),
+                        (0, "#8183854b", 0, 0),
+                        (0, "#dbdeff42", 1, 1),
+                        (0, "#38393e2d", 2, 2)
+                    ]
+
+                ## 3. MOSTRAR LA IMAGEN ENCIMA
+                # Si este botón es el que tiene el mouse encima, dibuja la imagen
+                if boton_hovereado == index:
+                    add "gui/choice_hover.png":
+                        at fadechoice
+                        # Al estar dentro del 'fixed', aparecerá exactamente encima
+                        xalign 0.5 
+                        yalign 0.5
+                    add "gui/star.png":
+                        at star
+                        xalign 0.1
+                        yalign 0.5
+                    add "gui/choice_stars.png":
+
+                        at ripple
+                        xalign 0.5
+                        yalign 0.5
 
 style choice_vbox is vbox
-style choice_button is button
+style choice_button is default:
+    properties gui.button_properties("choice_button")
+    
+    ## Forzamos el ancho y alto exactos en píxeles
+    xsize 1112
+    ysize 88
+    
+    ## Por si querés asegurarte de que use tu ruta personalizada con bordes protegidos
+    background Frame("gui/choice_idle_background.png", 20, 0, 20, 0)
+    hover_background Frame("gui/choice_hover_background.png", 20, 0, 20, 0)
 style choice_button_text is button_text
 
 style choice_vbox:
@@ -236,27 +302,7 @@ style choice_button_text is default:
 ##
 ## The quick menu is displayed in-game to provide easy access to the out-of-game
 ## menus.
-"""
-screen quick_menu():
 
-    ## Ensure this appears on top of other screens.
-    zorder 100
-
-    if quick_menu:
-
-        hbox:
-            style_prefix "quick"
-            style "quick_menu"
-
-            textbutton _("Back") action Rollback()
-            textbutton _("History") action ShowMenu('history')
-            textbutton _("Skip") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Auto") action Preference("auto-forward", "toggle")
-            textbutton _("Save") action ShowMenu('save')
-            textbutton _("Q.Save") action QuickSave()
-            textbutton _("Q.Load") action QuickLoad()
-            textbutton _("Prefs") action ShowMenu('preferences')
-"""
 
 default qm_hover = ""
 
@@ -271,12 +317,14 @@ screen quick_menu():
 
             # SAVE
             imagebutton auto "gui/menu-screens_fshift/quickmenu/save_%s.png" action QuickSave():
+                style "audio_2"
                 focus_mask True
                 hovered SetVariable("qm_hover", "save")
                 unhovered SetVariable("qm_hover", "")
 
             # AUTO
             imagebutton auto "gui/menu-screens_fshift/quickmenu/auto_%s.png" action Preference("auto-forward", "toggle"):
+                style "audio_2"
                 xoffset 40
                 focus_mask True
                 hovered SetVariable("qm_hover", "auto")
@@ -284,6 +332,7 @@ screen quick_menu():
             
             # SETTINGS
             imagebutton auto "gui/menu-screens_fshift/quickmenu/settings_%s.png" action ShowMenu('preferences'):
+                style "audio_3"
                 focus_mask True
                 hovered SetVariable("qm_hover", "settings")
                 unhovered SetVariable("qm_hover", "")
@@ -294,52 +343,61 @@ screen quick_menu():
             
             # SKIP
             imagebutton auto "gui/menu-screens_fshift/quickmenu/skip_%s.png" action Skip() sensitive True:
+                style "audio_2"
                 at qm
                 focus_mask True
                 hovered SetVariable("qm_hover", "skip")
                 unhovered SetVariable("qm_hover", "")
 
-        # 🔤 TEXTOS INDIVIDUALES
+        
+        fixed:
+            xoffset 10
+            yoffset 3
+            if qm_hover == "skip":
+                text "skip":
+                    at s_down
+                    xalign 0.635
+                    yalign 0.95
+                    size gui.interface_text_size
+                    style "qm_hover_outline"
+                    
+                    
+            if qm_hover == "save":
+                text "save":
+                    xalign 0.87
+                    yalign 0.68
+                    size gui.interface_text_size
+                    style "qm_hover_outline"
+                    at star
 
-        if qm_hover == "skip":
-            text "skip":
-                at s_down
-                xalign 0.635
-                yalign 0.95
-                size gui.interface_text_size
-                style "qm_hover_outline"
-                
-        if qm_hover == "save":
-            text "save":
-                xalign 0.87
-                yalign 0.68
-                size gui.interface_text_size
-                style "qm_hover_outline"
+            if qm_hover == "auto":
+                text "auto":
+                    xalign 0.895
+                    yalign 0.77
+                    size gui.interface_text_size
+                    style "qm_hover_outline"   
+                    at star   
 
-        if qm_hover == "auto":
-            text "auto":
-                xalign 0.89
-                yalign 0.77
-                size gui.interface_text_size
-                style "qm_hover_outline"      
-
-        if qm_hover == "settings":
-            text "settings":
-                xalign 0.89
-                yalign 0.86
-                size gui.interface_text_size
-                style "qm_hover_outline"
+            if qm_hover == "settings":
+                text "options":
+                    xalign 0.89
+                    yalign 0.86
+                    size gui.interface_text_size
+                    style "qm_hover_outline"
+                    at star
 
 style qm_hover_outline:
     font "fonts/Fredoka-Light.ttf"
+    color "#ffffff" 
+    
+    
     outlines [
-    (1,"#1b3f6f73", 0, 0),
-    (2, "#FFFFFF40", 0, 0),
-    (3, "#ffffff23", 0, 0),
-    (4, "#FFFFFF21", 0, 0),
-    (4, "#FFFFFF21", 0, 0),
-    (9, "#FFFFFF0A", 0, 0)
-]
+        (1, "#e6e6e6cc", 0, 0), 
+        (3, "#d4d4d45e", 0, 0), 
+        (6, "#ffffff23", 0, 0), 
+        (9, "#ffffff0a", 0, 0), 
+        (13, "#ffffff00", 0, 0) 
+    ]
 
 
 ## This code ensures that the quick_menu screen is displayed in-game, whenever
@@ -438,8 +496,127 @@ style navigation_button_text:
 ## Used to display the main menu when Ren'Py starts.
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#main-menu
+#BLUR SCRIPT_MAIN MENU
 
 screen main_menu():
+    tag menu
+    style_prefix "main_menu"
+    add "gui/menu-screens_fshift/mainmenu/background.png"
+    add "gui/menu-screens_fshift/mainmenu/background.png":
+        at Transform(function=parallax_transform(2))
+
+
+    fixed:
+        at zoom
+        add "gui/menu-screens_fshift/mainmenu/wave.png"
+        
+        button:
+            focus_mask True
+            xpos 0 ypos -75
+            add "gui/menu-screens_fshift/mainmenu/02.png":
+                    at Transform(function=parallax_transform(2.0))
+
+        
+        button:
+            focus_mask True
+            xpos 0 ypos -75
+            add "gui/menu-screens_fshift/mainmenu/03.png":
+                    at Transform(function=parallax_transform(2.6))
+                   
+
+        
+        button:
+            focus_mask True
+            xpos 0 ypos -75
+            add "gui/menu-screens_fshift/mainmenu/01.png":
+                    at Transform(function=parallax_transform(1.8))
+    
+    imagebutton:
+        idle "gui/menu-screens_fshift/mainmenu/logo.png"
+        action NullAction()
+        xoffset 1306
+        yoffset 709
+        at opacitymm
+
+    add "gui/menu-screens_fshift/mainmenu/bubbles.png":
+        xoffset 28
+        yoffset -171
+        at Transform(function=parallax_transform(7))
+
+    
+    add "gui/menu-screens_fshift/mainmenu/tinybubbles.png":
+        xoffset -49
+        yoffset -101
+        at Transform(function=parallax_transform(3))
+
+    #MENU Buttons
+    fixed:
+        at enter_fbottom
+        fixed:
+            at Transform(function=parallax_transform(3))
+
+            
+            imagebutton:
+                
+                idle "gui/menu-screens_fshift/mainmenu/play_idle.png"
+                hover "gui/menu-screens_fshift/mainmenu/play_idle.png"
+                style "audio_3"
+                at zoomin
+                action Start()
+                xoffset 129
+                yoffset 578
+
+            
+            imagebutton:
+                
+                idle "gui/menu-screens_fshift/mainmenu/load_idle.png"
+                hover "gui/menu-screens_fshift/mainmenu/load_idle.png"
+                style "audio_2"
+                action ShowMenu("load")
+                at zoomin
+                tooltip "load"        
+                xoffset 227
+                yoffset 771
+            if GetTooltip() == "load":
+                add "gui/star.png" at slide_in_left xoffset 194 yoffset 802
+
+            
+            imagebutton:
+                focus_mask True
+                idle "gui/menu-screens_fshift/mainmenu/gallery_idle.png"
+                hover "gui/menu-screens_fshift/mainmenu/gallery_idle.png"
+                style "audio_2"
+                action ShowMenu("cg_gallery")
+                at zoomin
+                tooltip "gallery"
+                xoffset 237
+                yoffset 840
+            if GetTooltip() == "gallery":
+                add "gui/star.png" at slide_in_left xoffset 203 yoffset 867
+
+            
+            imagebutton:
+                idle "gui/menu-screens_fshift/mainmenu/quit_idle.png"
+                hover "gui/menu-screens_fshift/mainmenu/quit_idle.png"
+                style "audio_2"
+                action Quit(confirm=False)
+                at zoomin
+                tooltip "quit"
+                xoffset 228
+                yoffset 933
+            if GetTooltip() == "quit":
+                add "gui/star.png" at slide_in_left xoffset 196 yoffset 942
+
+            imagebutton:
+                idle "gui/menu-screens_fshift/mainmenu/options_idle.png"
+                style "audio_2"
+                action ShowMenu("preferences")
+                at opacitymm
+                xoffset 1682
+                yoffset 55
+        
+    
+screen main_menu2():
 
     ## This ensures that any other menu screen is replaced.
     tag menu
@@ -677,16 +854,232 @@ style about_label_text:
 screen save():
 
     tag menu
-
-    use file_slots(_("Save"))
+    key "K_ESCAPE" action Return()
+    use ocean_file_slots("save")
 
 
 screen load():
 
     tag menu
+    key "K_ESCAPE" action Return()
+    use ocean_file_slots("load")
 
-    use file_slots(_("Load"))
+screen ocean_file_slots(mode):
+        add "gui/menu-screens_fshift/load_save/BG.png"
+        add "gui/menu-screens_fshift/load_save/BG.png":
+            zoom 1.1
+            yoffset -20
+            at Transform(function=parallax_transform(0.5))
+        add "gui/menu-screens_fshift/load_save/6.png":
+            xoffset 330
+            at Transform(function=parallax_transform(1))
 
+        add "gui/menu-screens_fshift/load_save/5.png":
+            xoffset -180
+            yoffset -70
+            at Transform(function=parallax_transform(2))
+
+        add "gui/menu-screens_fshift/load_save/4.png":
+            xalign 0.9
+            yalign 0.5
+            xoffset -110
+            yoffset 200
+            at Transform(function=parallax_transform(3))
+
+        fixed:
+            xpos 1020
+            add "gui/menu-screens_fshift/load_save/3.png":
+                at Transform(function=parallax_transform(4))
+            add "gui/menu-screens_fshift/load_save/2.png":
+                xoffset 60
+                at Transform(function=parallax_transform(5))
+
+        add "gui/menu-screens_fshift/load_save/1.png":
+            yoffset -400
+            xoffset -700
+            at Transform(function=parallax_transform(80))
+        add "gui/menu-screens_fshift/load_save/bubbles.png"
+
+        
+        if mode == "save":
+            add "gui/menu-screens_fshift/load_save/save_title.png" xpos 50 ypos 45
+        else:
+            add "gui/menu-screens_fshift/load_save/load_title.png" xpos 50 ypos 45
+
+
+        
+        fixed:
+            imagebutton:
+                at Transform(function=parallax_transform(3))
+                style "audio_5"
+
+                idle "gui/menu-screens_fshift/load_save/gallery_idle.png"
+                hover "gui/menu-screens_fshift/load_save/gallery_hover.png"
+
+                xpos 1135
+                ypos 120
+
+                action ShowMenu("cg_gallery")
+        
+        hbox:
+            xoffset 500
+            yoffset 30
+            spacing 40
+            imagebutton auto "gui/menu-screens_fshift/load_save/prev_%s.png":
+                    style "audio_3"
+                    at mm
+                    yoffset 850
+                    action FilePagePrevious()
+            
+            text "[FileCurrentPage()]/5":
+                color "#d2e2ffbe"
+                size 40
+                yoffset 890
+    
+
+            imagebutton auto "gui/menu-screens_fshift/load_save/next_%s.png":
+                    at mm
+                    style "audio_3"
+                    yoffset 850
+                    action FilePageNext(5)
+
+
+        
+        vbox:
+
+            xpos 75
+            ypos 155
+
+            spacing 55
+
+            for slot in range(1, 4):
+
+                $ slot_delay = (slot - 1) * 0.17
+
+                hbox:
+                    at slot_enter(delay=slot_delay)
+                    spacing 60
+
+                    hbox:
+                        ypos 160
+                        xpos 110
+                        text "[slot]":
+
+                            at slot_number
+
+                            font "fonts/BerkshireSwash-Regular.ttf"
+
+                            size 67
+
+                            color "#3c4991"
+
+                            xsize 70
+                            
+
+                            outlines [(1, "#ceddffa8", 0, 0)]
+
+                    button:
+                        xoffset 190
+                        yoffset 173
+                        background "gui/menu-screens_fshift/load_save/slot_idle.png" at m
+                        hover_background "gui/menu-screens_fshift/load_save/slot_hover.png"
+
+                        xsize 651
+                        ysize 143
+
+                        action (
+                            FileSave(slot)
+                            if mode == "save"
+                            else FileLoad(slot)
+                        )
+
+                        has fixed
+
+                        text FileSaveName(slot):
+
+                            xpos 45
+                            ypos 25
+
+                            size 24
+                            color "#96a2e2"
+
+                        text FileTime(
+                            slot,
+                            format="Date:  %d/%m/%Y     Time:   %H:%M",
+                            empty="Empty Slot"
+                        ):
+
+                            xpos 65
+                            ypos 34
+
+                            size 26
+                            color "#7e8ac7"
+                            outlines [(1, "#ffe1aac0", 0, 0)]
+
+
+        
+      
+        fixed:
+            at Transform(function=parallax_transform(3))
+
+            vbox:
+                xalign 0.79
+                yalign 0.68
+                at bottle_button(22)
+                imagebutton:   
+                    style "audio_5"
+                    idle "gui/menu-screens_fshift/load_save/load_idle.png"
+                    hover "gui/menu-screens_fshift/load_save/load_idle.png"
+                    at mm
+                    
+                    action ShowMenu("load")
+
+
+                if not main_menu:
+
+                    imagebutton:
+                        style "audio_5"
+                        idle "gui/menu-screens_fshift/load_save/save_idle.png"
+                        hover "gui/menu-screens_fshift/load_save/save_idle.png"
+                        at mm
+                        action ShowMenu("save")
+
+                
+                imagebutton:
+                    style "audio_5"
+                    xoffset -40
+                    idle "gui/menu-screens_fshift/load_save/options.png"
+                    hover "gui/menu-screens_fshift/load_save/options.png"
+                    at mm          
+                    action ShowMenu("preferences")
+
+
+                imagebutton:
+
+                    xoffset -40
+                    style "audio_5"
+                    idle "gui/menu-screens_fshift/load_save/history.png"
+                    hover "gui/menu-screens_fshift/load_save/history.png"
+                    at mm
+                    action ShowMenu("history")
+
+                imagebutton:
+                    style "audio_5"
+                    xoffset -54
+                    idle "gui/menu-screens_fshift/load_save/mainmenu_idle.png"
+                    at mm
+                    action MainMenu()
+
+
+                imagebutton:
+                    style "audio_5"
+                    idle "gui/menu-screens_fshift/load_save/quit.png"
+                    hover "gui/menu-screens_fshift/load_save/quit.png"
+                    at mm
+
+                
+
+                    action Quit(confirm=True)
 
 screen file_slots(title):
 
@@ -701,6 +1094,7 @@ screen file_slots(title):
             order_reverse True
 
             ## The page name, which can be edited by clicking on a button.
+
             button:
                 style "page_label"
 
@@ -979,7 +1373,132 @@ style slider_vbox:
 ##
 ## https://www.renpy.org/doc/html/history.html
 
+screen h_menu:
+    hbox:
+        xoffset 930
+        yoffset 800
+
+        imagebutton auto "gui/menu-screens_fshift/options/home_%s.png" action MainMenu():
+            style "audio_1"
+            at qm
+        imagebutton auto "gui/menu-screens_fshift/options/load_%s.png" action ShowMenu("load"):
+            style "audio_1"
+            at qm
+
+        imagebutton auto "gui/menu-screens_fshift/options/save_%s.png" action ShowMenu("save"):
+            style "audio_1"
+            at qm
+
+        
+        imagebutton auto "gui/menu-screens_fshift/options/options_%s.png" action ShowMenu("preferences"):
+            style "audio_1"
+            at qm
+
+        
+        imagebutton auto "gui/menu-screens_fshift/options/history_%s.png" action ShowMenu("history"):
+            style "audio_1"
+            at qm
+
+        
+        imagebutton auto "gui/menu-screens_fshift/options/quit_%s.png" action Quit():
+            style "audio_1"
+            at qm
+
 screen history():
+    tag menu
+    key "K_ESCAPE" action Return()
+    fixed:
+        add "gui/menu-screens_fshift/history/BG.png":
+            xoffset -175
+            yoffset -176
+            at Transform(function=parallax_transform(2))
+
+        
+        add "gui/menu-screens_fshift/history/4.png":
+            xoffset -138
+            yoffset -403
+            at Transform(function=parallax_transform(5))
+
+        
+        add "gui/menu-screens_fshift/history/3.png":
+            xoffset -64
+            yoffset -56
+            at Transform(function=parallax_transform(2))
+        
+        add "gui/menu-screens_fshift/history/2.png":
+            xoffset -760
+            yoffset -499
+            at Transform(function=parallax_transform(30))
+        fixed:
+            xoffset -370
+            use stars_screen
+        
+        add "gui/menu-screens_fshift/history/1.png"
+
+        
+    imagebutton auto "gui/menu-screens_fshift/history/gallery_%s.png" action ShowMenu("cg_gallery"):
+        style "audio_3"
+        xoffset 758
+        yoffset 412
+        at m
+        focus_mask True
+    use h_menu
+    use back
+    ## Viewport con scroll
+    viewport id "history_scroll":
+        yoffset 30
+        xoffset 45
+        xpos       950
+        ypos       300
+        xsize      810
+        ysize      413
+        scrollbars "vertical"
+        mousewheel True
+        draggable  True
+
+        vscrollbar_base_bar Frame("gui/menu-screens_fshift/history/scroll_bar.png", 0, 15, 0, 15)
+        vscrollbar_thumb Frame("gui/menu-screens_fshift/history/scroll_thumb.png", 0, 15, 0, 15)
+        vscrollbar_xsize 29
+        vscrollbar_unscrollable "hide" 
+
+        
+        vscrollbar_thumb_offset -10
+        
+        
+        vscrollbar_top_gutter 0
+        vscrollbar_bottom_gutter 0
+        vbox:
+            xsize   760
+            spacing 5
+
+            
+            for h in _history_list:
+
+                
+                if h.who:
+                    hbox:
+                        spacing 8
+                        add "gui/menu-screens_fshift/history/star.png"
+                        text h.who:
+                            yoffset 7   
+                            xoffset -6
+                            size 38
+                            color "#adc2df"
+                            font "fonts/BerkshireSwash-Regular.ttf"
+ 
+                
+                text h.what:
+                    font "fonts/Fredoka-Light.ttf"
+                    size 23
+                    color "#dcdde0b0"
+                    xsize 700
+                    xoffset 10
+
+                
+                add "gui/menu-screens_fshift/history/separator.png":
+                    xoffset 150
+            
+screen history_old():
 
     tag menu
 
@@ -1234,8 +1753,84 @@ style help_label_text:
 ## question.
 ##
 ## https://www.renpy.org/doc/html/screen_special.html#confirm
+style confirm_prompt_text:
+    color "#F5E6C8"
+    size 33
+    xsize 559
+    line_spacing -4
+    font "fonts/Fredoka-Regular.ttf"
 
 screen confirm(message, yes_action, no_action):
+    modal True
+    zorder 200
+    style_prefix "confirm"
+
+    key "K_ESCAPE" action no_action
+
+    add "gui/menu-screens_fshift/confirm/bg.png":
+        at opacity_confirm
+
+    add "gui/menu-screens_fshift/confirm/frame.png":
+        at s_down
+        xoffset 483
+        yoffset 202
+
+    # Solo el mensaje en el frame centrado — ya no arrastra los botones
+    frame:
+        xalign 0.5
+        yalign 0.45
+        background None
+        padding (0, 0)
+
+        label _(message):
+            style "confirm_prompt"
+            xalign 0.5
+            yoffset -10
+
+    # Botones con posición fija, independiente del tamaño del mensaje
+    hbox:
+        xalign 0.5
+        yalign 0.5
+        yoffset 60        # ajustá este valor para bajarlos respecto al centro
+        spacing 80
+
+        imagebutton:
+            style "audio_2"
+            yoffset 20
+            idle  "gui/menu-screens_fshift/confirm/yes.png"
+            hover "gui/menu-screens_fshift/confirm/yes.png"
+            action yes_action
+            tooltip "yes"
+
+        imagebutton:
+            style "audio_2"
+            yoffset 20
+            idle  "gui/menu-screens_fshift/confirm/no.png"
+            hover "gui/menu-screens_fshift/confirm/no.png"
+            action no_action
+            tooltip "no"
+
+    # Efectos tooltip — misma referencia de posición que el hbox
+    if GetTooltip() == "yes":
+        add "gui/menu-screens_fshift/confirm/glow.png":
+            xoffset -86
+            yoffset 86
+            at ripple
+        add "gui/menu-screens_fshift/confirm/hover_btn.png":
+            xoffset 670
+            yoffset 530
+            at fade_overlay
+
+    if GetTooltip() == "no":
+        add "gui/menu-screens_fshift/confirm/glow.png":
+            xoffset 120
+            yoffset 86
+            at ripple
+        add "gui/menu-screens_fshift/confirm/hover_btn.png":
+            xoffset 915
+            yoffset 530
+            at fade_overlay
+"""screen confirm(message, yes_action, no_action):
 
     ## Ensure other screens do not get input while this screen is displayed.
     modal True
@@ -1267,7 +1862,7 @@ screen confirm(message, yes_action, no_action):
     ## Right-click and escape answer "no".
     key "game_menu" action no_action
 
-
+"""
 style confirm_frame is gui_frame
 style confirm_prompt is gui_prompt
 style confirm_prompt_text is gui_prompt_text

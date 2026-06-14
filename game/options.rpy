@@ -14,7 +14,7 @@
 
 define config.name = _("You're Just a Third Wheeler!")
 define config.mouse = {
-    "default": [("gui/cursor.png", 0, 0)],
+    "default": [("gui/cursor.png", 3, 15)],
 }
 
 ## Determines if the title given above is shown on the main menu screen. Set
